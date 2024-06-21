@@ -422,12 +422,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
             self._needs_limit_info = True
             logger.debug("Need both limits before reset_slider_limits can work.")
             self.set_enable_state()
-            return
-        
-        if self.value is not None and (self.value > self.maximum or self.value < self.minimum):
-            logger.debug("Slider out of bounds.")
-            raise ValueError('Slider is out of bounds either greater than max or less than min')
-     
+            return 
 
         logger.debug("Has both limits, proceeding.")
         self._needs_limit_info = False
@@ -503,6 +498,12 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         array of allowed values where the length of the array is the number of slider positions.
         and the slider position i has value array[i].
         """
+        
+
+        if self.value is not None and (self.value > self.maximum or self.value < self.minimum):
+            logger.debug("slider out of bounds.")
+            raise ValueError('slider is out of bounds either greater than max or less than min')
+
         forward_map = []
         backward_map = []
         forward_map_value = self.value
@@ -544,6 +545,8 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         Given max, min, and num steps calculate step size
         """
         self.step_size = (self.maximum - self.minimum) / self.num_steps
+        if self.step_size == 0:
+            raise ValueError('step size is zero in map creation function call')
         # maybe do callback to stepsize line edit  here?
 
     def find_closest_slider_position_to_value(self, val):
@@ -985,14 +988,9 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         ----------
         new_steps : int
         """
-        self._reset_counts +=1
 
-        if self._reset_counts < 15: 
-            self._num_steps = int(new_steps)
-            self.reset_slider_limits()
-        else:
-            print('called reset limits too many times')
-            return False
+        self._num_steps = int(new_steps)
+        self.reset_slider_limits()
 
     @Property(float)
     def step_size(self):
@@ -1003,7 +1001,6 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         -------
         int
         """
-        print('in local')
         return self._step_size
 
     @step_size.setter
@@ -1046,7 +1043,6 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         """
         String to connect to pydm channel after initialization
         """
-        print('in local')
         return self._step_size_channel
 
     @step_size_channel.setter
@@ -1059,7 +1055,6 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         Channel readback value used to determine slider position
         and generate a slider positions to value map
         """
-        print('in local')
         return self._value
 
     @value.setter

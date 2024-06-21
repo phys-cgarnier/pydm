@@ -377,6 +377,20 @@ def test_reset_slider_limits(qtbot, signals, minimum, maximum, write_access, con
             pydm_slider._write_access and pydm_slider._connected and not pydm_slider._needs_limit_info
         )
 
+@pytest.mark.parametrize(
+    "new_value, minimum, maximum",
+    [
+        (10, -10, 20),
+        (-10, -10, 20),
+        (20, -10, 20),
+        (-200, -10, 20),
+        (200, -10, 20),
+        (0, 0, 0),
+        (10, 10, 10),
+    ],
+)
+def test_value_out_of_bounds(qtbot,initialized_value,minimum,maximum):
+    pass
 
 @pytest.mark.parametrize(
     "new_value, minimum, maximum",

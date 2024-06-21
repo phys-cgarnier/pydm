@@ -102,7 +102,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         self._num_steps = 101
         self._orientation = Qt.Horizontal
         self._step_size_channel = None
-
+        self._reset_counts = 0
         # Set up all the internal widgets that make up a PyDMSlider.
         # We'll add all these things to layouts when we call setup_widgets_for_orientation
         label_size_policy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
@@ -423,6 +423,12 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
             logger.debug("Need both limits before reset_slider_limits can work.")
             self.set_enable_state()
             return
+        
+        if self.value is not None and (self.value > self.maximum or self.value < self.minimum):
+            logger.debug("Slider out of bounds.")
+            raise ValueError('Slider is out of bounds either greater than max or less than min')
+     
+
         logger.debug("Has both limits, proceeding.")
         self._needs_limit_info = False
         if self._parameters_menu_flag:
@@ -979,9 +985,14 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         ----------
         new_steps : int
         """
+        self._reset_counts +=1
 
-        self._num_steps = int(new_steps)
-        self.reset_slider_limits()
+        if self._reset_counts < 15: 
+            self._num_steps = int(new_steps)
+            self.reset_slider_limits()
+        else:
+            print('called reset limits too many times')
+            return False
 
     @Property(float)
     def step_size(self):
@@ -992,7 +1003,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         -------
         int
         """
-
+        print('in local')
         return self._step_size
 
     @step_size.setter
@@ -1004,7 +1015,6 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         ----------
         new_step_size : float
         """
-
         if self.maximum is None or self.minimum is None or new_step_size <= 0:
             return False
 
@@ -1025,6 +1035,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         ----------
         new_val : int, float
         """
+
         try:
             self.step_size = float(new_val)
         except ValueError:
@@ -1035,6 +1046,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         """
         String to connect to pydm channel after initialization
         """
+        print('in local')
         return self._step_size_channel
 
     @step_size_channel.setter
@@ -1047,6 +1059,7 @@ class PyDMSlider(QFrame, TextFormatter, PyDMWritableWidget, new_properties=_step
         Channel readback value used to determine slider position
         and generate a slider positions to value map
         """
+        print('in local')
         return self._value
 
     @value.setter

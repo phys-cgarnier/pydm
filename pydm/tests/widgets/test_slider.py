@@ -380,17 +380,27 @@ def test_reset_slider_limits(qtbot, signals, minimum, maximum, write_access, con
 @pytest.mark.parametrize(
     "new_value, minimum, maximum",
     [
-        (10, -10, 20),
-        (-10, -10, 20),
-        (20, -10, 20),
-        (-200, -10, 20),
-        (200, -10, 20),
-        (0, 0, 0),
-        (10, 10, 10),
+        (10, -10, 0),
+        (-11, -10, 20),
+        (1, 0, 0),
+        (9, 10, 10),
     ],
 )
-def test_value_out_of_bounds(qtbot,initialized_value,minimum,maximum):
-    pass
+def test_value_out_of_bounds(qtbot,new_value,minimum,maximum):
+        pydm_slider = PyDMSlider()
+        qtbot.addWidget(pydm_slider)
+
+        pydm_slider.userDefinedLimits = True
+        pydm_slider.userMinimum = minimum
+        pydm_slider.userMaximum = maximum
+        pydm_slider.value = new_value
+        print(pydm_slider.value)
+        if pydm_slider.value == pydm_slider.userMaximum or pydm_slider.value == pydm_slider.userMinimum:
+            clipped_to_bound = True
+        else:
+            clipped_to_bound = False
+        assert clipped_to_bound
+        #print(f'value {pydm_slider.value} , new value {new_value}, maximum {pydm_slider.userMaximum},  minimum {pydm_slider.userMinimum}')
 
 @pytest.mark.parametrize(
     "new_value, minimum, maximum",

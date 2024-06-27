@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>400</width>
     <height>300</height>
    </rect>
   </property>
@@ -16,29 +16,17 @@
   <widget class="PyDMSlider" name="PyDMSlider">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>60</x>
      <y>90</y>
-     <width>291</width>
-     <height>37</height>
+     <width>271</width>
+     <height>54</height>
     </rect>
    </property>
    <property name="toolTip">
     <string/>
    </property>
-   <property name="precision" stdset="0">
-    <number>8</number>
-   </property>
-   <property name="precisionFromPV" stdset="0">
-    <bool>false</bool>
-   </property>
    <property name="channel" stdset="0">
-    <string>cgarnier:LEVEL_SET</string>
-   </property>
-   <property name="step_size" stdset="0">
-    <double>0.000000000000000</double>
-   </property>
-   <property name="step_size_channel" stdset="0">
-    <string>cgarnier:STEP.INPA</string>
+    <string>ca://cgarnier:LEVEL_SET</string>
    </property>
   </widget>
  </widget>

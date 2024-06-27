@@ -25,3 +25,23 @@ record(calc, "DEMO:TAN")
     field(INPA, "DEMO:ANGLE CP")
 }
 
+record(ao, "cgarnier:LEVEL_SET"){ 
+    field(DESC, "Voltage Level Set Point (V)")
+    field(PREC, "3")
+    field(EGU, "V")
+    field(DRVH, ".007") 
+    field(DRVL, "-.007") 
+    field(HOPR, ".007") 
+    field(LOPR, "-.007") 
+}
+
+record(calc, "cgarnier:STEP"){ 
+    field(INPA, ".0005")
+    field(CALC, "A")
+
+}
+
+
+record(ao, "cgarnier:LEVEL_SET4"){ 
+    field(DESC, "Current Level Set Point (mA)")
+}
